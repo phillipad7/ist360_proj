@@ -22,8 +22,10 @@ def callback_func(pin):
         pir2_last = t_now
 
     t_diff = abs(pir1_last - pir2_last)
-    if t_diff < 0.5:
-        print("it's been less than 0.5 seconds since both PIRs were activated")
+    if t_diff < 1:
+        print("it's been less than 1 second since both PIRs were activated")
+    else:
+        print('longger than 1 second')
 
 # change GPIO.RISING to GPIO.FALIING if your PIRs are active low 
 GPIO.add_event_detect(12, GPIO.RISING, callback=callback_func)
