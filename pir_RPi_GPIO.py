@@ -50,10 +50,33 @@ while True:
     # if GPIO.event_detected(4):
     #     print('PIR 2 detect')
 
-    if GPIO.event_detected(12) and GPIO.event_detected(4):
+    # if GPIO.event_detected(12) and GPIO.event_detected(4):
+    #     print("both sensor detected -- human passing through")
+    # elif GPIO.event_detected(12) and not GPIO.event_detected(4):
+    #     print("pin_12 detected and pin_4 not -- cat passing")
+    # elif GPIO.event_detected(4) and not GPIO.event_detected(12):
+    #     print("pin_4 detected and pin_12 not -- ????")
+
+
+    d1 = GPIO.event_detected(12)
+    d2 = GPIO.event_detected(4)
+    if d1:
+        print('pin_12 -- d1 true')
+    if d2:
+        print('pin_4  -- d2 true')
+
+
+        
+    if d1 and d2:
         print("both sensor detected -- human passing through")
-    elif GPIO.event_detected(12) and not GPIO.event_detected(4):
-        print("pin_12 detected and pin_4 not -- cat passing")
-    elif GPIO.event_detected(4) and not GPIO.event_detected(12):
-        print("pin_4 detected and pin_12 not -- ????")
+    elif d1 and (not d2):
+        print("pin_12 true  pin_4 false -- cat passing")
+    elif d2 and (not d1):
+        print('pin_12 false pin_4 true  -- ????')
+    else:
+        print('pin_12:{}\npin_4:{} -- neither true -- no motion'.format(d1, d2))
+
+
+
     time.sleep(0.1)
+
