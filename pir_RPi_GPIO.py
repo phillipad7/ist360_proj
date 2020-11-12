@@ -26,8 +26,9 @@ def callback_func(pin):
     t1 = start - pir1_last
     t2 = start - pir2_last
 
-    if not t1 or not t2:
-        print("t1:{}\nt2:{}\n".format(t1,t2))
+    # if not t1 or not t2:
+    print("t1:{}\nt2:{}\n".format(t1,t2))
+    
     if t_diff < 1:
         print("it's been less than 1 second since both PIRs were activated")
     else:
@@ -51,6 +52,8 @@ while True:
 
     if GPIO.event_detected(12) and GPIO.event_detected(4):
         print("both sensor detected -- human passing through")
-    if GPIO.event_detected(12) and not GPIO.event_detected(4):
+    elif GPIO.event_detected(12) and not GPIO.event_detected(4):
         print("pin_12 detected and pin_4 not -- cat passing")
+    elif GPIO.event_detected(4) and not GPIO.event_detected(12):
+        print("pin_4 detected and pin_12 not -- ????")
     time.sleep(0.1)
