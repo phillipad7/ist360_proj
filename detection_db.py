@@ -29,22 +29,17 @@ def insert(type):
     except:
         print('ERR: cannot insert')
 
+
 def fetch():
     td = datetime.now()
-    # .replace(hour=0, minute=0, second=0,)
     ytd = td.replace(day=td.day-1) 
-    print(td, '\n', ytd)
 
     result = []
 
     try:
-        cur.execute("SELECT * FROM detection where trigTime >%s and trigTime < %s", (ytd, td))
+        cur.execute("SELECT * FROM detection where trigTime>%s and trigTime<%s", (ytd, td))
         # result is list of tuple
         result = cur.fetchall()
-
-        print('ID\tTYPE\tDATE')
-        for id, tp, date in result:
-            print(id, '\t', tp, '\t', date)
         
     except:
         print('ERR: cannot retrieve')
@@ -54,9 +49,5 @@ def fetch():
 if __name__=='__main__':
     print('\n*********************start*************\n')
     a = fetch()
-
     print(a)
 
-
-
-    print('\n-----DONE--------')

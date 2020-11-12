@@ -7,9 +7,10 @@ import schedule
 from datetime import datetime
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
+from bs4 import BeautifulSoup
 
 import user_list
-from detection_db import db
+import detection_db as db
 
 
 SENDER_HOST = 'smtp.office365.com'
@@ -21,8 +22,8 @@ __location__ = os.path.realpath(
 _subject = 'Default Subject - Test Email'
 _sender, _sender_pass = user_list.EMAIL_CGU, user_list.PASS_CGU
 _receivers = ['catsz35@hotmail.com']
-_filePath = os.path.join(__location__, 'DefaultTemplate.html')
-
+_inFilePath = os.path.join(__location__, 'DefaultTemplate.html')
+_outFilePath = os.path.join(__location__, 'output.html')
 
 print('__location__: {}'.format(__location__))
 
@@ -51,18 +52,15 @@ def _assembleHtmlEmail(subject:str, sender:str, receivers:str, filePath):
     return message
     
 
-def sendEmail(subject=_subject, sender=_sender, sender_pass=_sender_pass, receivers=_receivers, filePath=_filePath):
+def sendEmail(subject=_subject, sender=_sender, sender_pass=_sender_pass, receivers=_receivers, filePath=_outFilePath):
     context = ssl.create_default_context()
 
-    # td = datetime.today()
-    # ntSec = td.replace(day=td.day, hour=td.hour, minute=td.minute, second=(td.second+10)%60, microsecond=td.microsecond)
-
     try:
-        threading.Timer(60, sendEmail).start()
+        # threading.Timer(30, sendEmail).start()
 
         server = smtplib.SMTP(SENDER_HOST, SENDER_PORT)
         # server.ehlo() # Can be omitted
-        server.starttls(context=context) # Secure the connection
+        server.starttls(context=context)
         server.login(sender, sender_pass)
 
         message = _assembleHtmlEmail(subject, sender, receivers, filePath)
@@ -76,6 +74,31 @@ def sendEmail(subject=_subject, sender=_sender, sender_pass=_sender_pass, receiv
         server.quit() 
 
 
+def updateHTML():
+    detect=['human','cat','err']
+    dt = db.fetch()
+
+
+    with open(_inFilePath,'r') as fh:        
+        html = open(_inFilePath).read()
+        soup = BeautifulSoup(html, 'lxml')
+        sqlResult = soup.find(id='sqlResult')
+        sqlResult.string=''
+        # print(sqlResult)
+
+        for id, tp, date in dt:
+            child = soup.new_tag('p', class_="child")
+            child.string = '{:<5} {:<9} {}'.format(id,detect[tp],date)
+            sqlResult.append(child)
+
+        # print(soup.prettify())
+
+    html = soup.prettify("utf-8")
+    with open("output.html", "wb") as file:
+        file.write(html)
+
+    return True
+
 if __name__=='__main__':
     print('\n-----------START--------------\n')
 
@@ -87,17 +110,9 @@ if __name__=='__main__':
     # sendEmail(subject, sender, sender_pass, receivers, filePath1)
     sendEmail()
 
-
-
-
+    # updateHTML()
 
 #----------------------------------------------------------------------------------
-
-
-
-
-
-
 
     def job():
         print('Im... It is {}'.format(datetime.now()))
@@ -105,10 +120,11 @@ if __name__=='__main__':
 
     # schedule.every(1).minutes.at(":19").do(job)
     # schedule.every(1).minutes.at(":30").do(sendEmail)
+    schedule.every().day.at("17:00").do(sendEmail)
 
-
-    # while True:
-    #     schedule.run_pending()
-    #     time.sleep(1)
+    while True:
+        schedule.run_pending()
+        # time.sleep(1)
+        time.sleep(3600)
 
     
