@@ -1,9 +1,14 @@
 import smtplib, ssl
 import os
-import user_list
+import threading
+import time
+import schedule
 
+from datetime import datetime
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
+
+import user_list
 
 
 SENDER_HOST = 'smtp.office365.com'
@@ -19,7 +24,6 @@ _filePath = os.path.join(__location__, 'DefaultTemplate.html')
 
 
 print('__location__: {}'.format(__location__))
-
 
 
 
@@ -48,7 +52,13 @@ def _assembleHtmlEmail(subject:str, sender:str, receivers:str, filePath):
 
 def sendEmail(subject=_subject, sender=_sender, sender_pass=_sender_pass, receivers=_receivers, filePath=_filePath):
     context = ssl.create_default_context()
+
+    # td = datetime.today()
+    # ntSec = td.replace(day=td.day, hour=td.hour, minute=td.minute, second=(td.second+10)%60, microsecond=td.microsecond)
+
     try:
+        threading.Timer(60, sendEmail).start()
+
         server = smtplib.SMTP(SENDER_HOST, SENDER_PORT)
         # server.ehlo() # Can be omitted
         server.starttls(context=context) # Secure the connection
@@ -57,6 +67,8 @@ def sendEmail(subject=_subject, sender=_sender, sender_pass=_sender_pass, receiv
         message = _assembleHtmlEmail(subject, sender, receivers, filePath)
         server.sendmail(sender, receivers, message.as_string())
 
+        print('Email Sent')
+
     except Exception as e:
         print(e)
     finally:
@@ -64,15 +76,38 @@ def sendEmail(subject=_subject, sender=_sender, sender_pass=_sender_pass, receiv
 
 
 if __name__=='__main__':
-    print('-----------START--------------')
+    print('\n-----------START--------------\n')
 
     subject = 'Test Email - Sent from Python'
     sender, sender_pass = user_list.EMAIL_CGU, user_list.PASS_CGU
     receivers = ['catsz35@hotmail.com','phil.wong@live.com']
     filePath1 = 'Template.html'
 
-
-
     # sendEmail(subject, sender, sender_pass, receivers, filePath1)
     sendEmail()
 
+
+
+
+
+#----------------------------------------------------------------------------------
+
+
+
+
+
+
+
+    def job():
+        print('Im... It is {}'.format(datetime.now()))
+        return
+
+    # schedule.every(1).minutes.at(":19").do(job)
+    # schedule.every(1).minutes.at(":30").do(sendEmail)
+
+
+    # while True:
+    #     schedule.run_pending()
+    #     time.sleep(1)
+
+    
