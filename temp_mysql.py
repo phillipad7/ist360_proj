@@ -1,14 +1,24 @@
 import mysql.connector as mysql
+from datetime import datetime
 
-# enter your server IP address/domain name
-HOST = "192.168.1.75" # or "domain.com"
-# database name, if you want just to connect to MySQL server, leave it empty
-DATABASE = "test"
-# this is the user you create
-USER = "kawa"
-# user password
-PASSWORD = "12345"
-# connect to MySQL server
-db_connection = mysql.connect(host=HOST, database=DATABASE, user=USER, password=PASSWORD)
-print("Connected to:", db_connection.get_server_info())
-# enter your code here!
+mydb = mysql.connect(
+  host="192.168.1.75",
+  user="kawa",
+  password="12345",
+  database="test"
+)
+
+mycursor = mydb.cursor()
+
+timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+
+sql = "INSERT INTO detection (type, trigTime) VALUES (%s, %s)"
+val = (0, timestamp)
+
+try:
+    mycursor.execute(sql, val)
+    mydb.commit()
+    print(mycursor.rowcount, "record inserted.")
+except e:
+    print('wrong')
+    # print(e.message)
