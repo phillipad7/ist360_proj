@@ -33,8 +33,8 @@ def callback_func(pin):
         print('longger than 1 second')
 
 # change GPIO.RISING to GPIO.FALIING if your PIRs are active low 
-# GPIO.add_event_detect(12, GPIO.RISING, callback=callback_func)
-# GPIO.add_event_detect(4, GPIO.RISING, callback=callback_func)
+GPIO.add_event_detect(12, GPIO.RISING, callback=callback_func)
+GPIO.add_event_detect(4, GPIO.RISING, callback=callback_func)
 
 # def main():
 #     while True:
@@ -48,8 +48,8 @@ def callback_func(pin):
 
 
 
-GPIO.add_event_detect(12, GPIO.RISING)  # add rising edge detection on a channel
-GPIO.add_event_detect(4,  GPIO.RISING)  #for both buttons
+# GPIO.add_event_detect(12, GPIO.RISING)  # add rising edge detection on a channel
+# GPIO.add_event_detect(4,  GPIO.RISING)  #for both buttons
 
 start = time.time()
 while True:
