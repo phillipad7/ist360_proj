@@ -44,6 +44,7 @@ GPIO.add_event_detect(4, GPIO.RISING, callback=callback_func)
 # GPIO.add_event_detect(4,  GPIO.RISING)  #for both buttons
 
 start = time.time()
+
 while True:
     # if GPIO.event_detected(12):
     #     print('PIR 1 detect')
@@ -66,15 +67,15 @@ while True:
         print('pin_4  -- d2 true')
 
 
-        
+
     if d1 and d2:
         print("both sensor detected -- human passing through")
     elif d1 and (not d2):
         print("pin_12 true  pin_4 false -- cat passing")
     elif d2 and (not d1):
         print('pin_12 false pin_4 true  -- ????')
-    else:
-        print('pin_12:{}\npin_4:{} -- neither true -- no motion'.format(d1, d2))
+    # else:
+    #     print('pin_12:{}\npin_4:{}\n -- neither true -- no motion'.format(d1, d2))
 
 
 
