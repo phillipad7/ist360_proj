@@ -9,6 +9,7 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 
 import user_list
+from detection_db import db
 
 
 SENDER_HOST = 'smtp.office365.com'
