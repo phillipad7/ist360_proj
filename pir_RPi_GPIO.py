@@ -57,6 +57,6 @@ while True:
         print('PIR 1 detect')
     if GPIO.event_detected(4):
         print('PIR 2 detect')
-    if time.time() - start > 5:
-        print('Timeout')
+    # if time.time() - start > 5:
+    #     print('Timeout')
     time.sleep(0.1)
