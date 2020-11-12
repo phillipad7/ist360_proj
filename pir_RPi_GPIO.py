@@ -9,7 +9,7 @@ GPIO.setmode(GPIO.BCM)
 GPIO.setup(12, GPIO.IN, GPIO.PUD_DOWN)
 GPIO.setup(4, GPIO.IN, GPIO.PUD_DOWN)
 
-pir1_last = pir2_last = time.time()
+start = pir1_last = pir2_last = time.time()
 
 def callback_func(pin):
     global pir1_last
@@ -22,6 +22,10 @@ def callback_func(pin):
         pir2_last = t_now
 
     t_diff = abs(pir1_last - pir2_last)
+    t1 = start - pir1_last
+    t2 = start - pir2_last
+    if not t1 or not t2:
+        print("t1:{}\nt2:{}\n".format(t1,t2))
     if t_diff < 1:
         print("it's been less than 1 second since both PIRs were activated")
     else:
