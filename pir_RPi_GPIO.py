@@ -34,8 +34,8 @@ def callback_func(pin):
         print('longger than 1 second')
 
 # change GPIO.RISING to GPIO.FALIING if your PIRs are active low 
-GPIO.add_event_detect(12, GPIO.RISING, callback=callback_func, timeout=1000)
-GPIO.add_event_detect(4, GPIO.RISING, callback=callback_func, timeout=1000)
+GPIO.add_event_detect(12, GPIO.RISING, callback=callback_func)
+GPIO.add_event_detect(4, GPIO.RISING, callback=callback_func)
 
 
 
