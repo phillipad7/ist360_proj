@@ -19,7 +19,7 @@ SENDER_PORT = 587
 __location__ = os.path.realpath(
     os.path.join(os.getcwd(), os.path.dirname(__file__)))
 
-_subject = 'Default Subject - Test Email'
+_subject = 'PIR Daily Report'
 _sender, _sender_pass = user_list.EMAIL_CGU, user_list.PASS_CGU
 _receivers = ['catsz35@hotmail.com']
 _inFilePath = os.path.join(__location__, 'DefaultTemplate.html')
@@ -105,7 +105,7 @@ if __name__=='__main__':
     subject = 'Test Email - Sent from Python'
     sender, sender_pass = user_list.EMAIL_CGU, user_list.PASS_CGU
     receivers = ['catsz35@hotmail.com','phil.wong@live.com']
-    filePath1 = 'Template.html'
+    filePath1 = 'resources/Template.html'
 
     # sendEmail(subject, sender, sender_pass, receivers, filePath1)
     sendEmail()
@@ -117,14 +117,14 @@ if __name__=='__main__':
     def job():
         print('Im... It is {}'.format(datetime.now()))
         return
-
     # schedule.every(1).minutes.at(":19").do(job)
-    # schedule.every(1).minutes.at(":30").do(sendEmail)
+    schedule.every(1).minutes.at(":30").do(sendEmail)
+
     schedule.every().day.at("17:00").do(sendEmail)
 
     while True:
         schedule.run_pending()
-        # time.sleep(1)
-        time.sleep(3600)
+        time.sleep(1)
+        # time.sleep(36000)
 
     

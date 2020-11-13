@@ -41,19 +41,15 @@ start = time.time()
 while True:
     d1 = GPIO.event_detected(12)
     d2 = GPIO.event_detected(4)
-    # if d1:
-    #     print('p_12 -- T')
-    # if d2:
-    #     print('p_4  -- T')
 
     if d1 and d2:
-        print("p_12 T p_4 T -- human")
+        # print("p_12 T p_4 T -- human")
         detection_db.insert(0)
     elif d1 and (not d2):
-        print("p_12 T p_4 F -- cat")
+        # print("p_12 T p_4 F -- cat")
         detection_db.insert(1)
     elif d2 and (not d1):
-        print('p_12 F p_4 T -- ???')
+        # print('p_12 F p_4 T -- ???')
         detection_db.insert(2)
     # else:
     #     print('pin_12:{}\npin_4:{}\n -- neither true -- no motion'.format(d1, d2))
